@@ -5,6 +5,8 @@ from io import BytesIO
 
 BASE64_PREAMBLE = "data:image/png;base64,"
 
+def to_np(blob):
+    return np.asarray(blob).astype(np.uint8)
 
 def generate_mask(label_id, remove=True, segmentation=None, segments_info=None):
     BLUR = 5
@@ -46,3 +48,4 @@ def pil_to_b64(pil_img):
 
 def b64_to_pil(b64_str):
     return Image.open(BytesIO(base64.b64decode(b64_str.replace(BASE64_PREAMBLE, ""))))
+
