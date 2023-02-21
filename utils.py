@@ -8,26 +8,16 @@ BASE64_PREAMBLE = "data:image/png;base64,"
 def to_np(blob):
     return np.asarray(blob).astype(np.uint8)
 
-def generate_mask(label_id, remove=True, segmentation=None, segments_info=None):
+def generate_mask(label_id, segmentation=None, segments_info=None):
     BLUR = 5
     BLUR_SIZE = BLUR * BLUR
-    # label_id = 1
-    # for each segment, draw its legend
-    # for segment in segments_info:
-    #     if segment["label"] == desired_label:
-    #         label_id = segment["id"]
-    #         continue
 
-    remove = True
     on = 255 if remove else 0
     off = 0 if remove else 255
     map_bits = np.vectorize(lambda p: on if p == label_id else off)
     mapped_np_img = map_bits(np.asarray(segmentation))
     mask = Image.fromarray(mapped_np_img.astype("uint8"), "L")
-    if remove:
-        mask = mask.filter(ImageFilter.MaxFilter(BLUR_SIZE))
-    else:
-        mask = mask.filter(ImageFilter.MinFilter(BLUR_SIZE))
+    mask = mask.filter(ImageFilter.MaxFilter(BLUR_SIZE))
     return mask.convert("RGB")
 
 
