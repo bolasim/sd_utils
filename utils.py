@@ -12,8 +12,8 @@ def generate_mask(label_id, segmentation=None, segments_info=None):
     BLUR = 5
     BLUR_SIZE = BLUR * BLUR
 
-    on = 255 if remove else 0
-    off = 0 if remove else 255
+    on = 255
+    off = 0
     map_bits = np.vectorize(lambda p: on if p == label_id else off)
     mapped_np_img = map_bits(np.asarray(segmentation))
     mask = Image.fromarray(mapped_np_img.astype("uint8"), "L")
